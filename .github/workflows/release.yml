@@ -1,0 +1,106 @@
+name: release
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.21.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/gen-check.mjs
+      - run: pnpm exec tsc --noEmit -p tsconfig.json
+      - run: node --test test/*.test.ts
+      - name: the tag must match the package version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          tag="${{ github.event.release.tag_name }}"
+          if [ "v$version" != "$tag" ]; then
+            echo "package.json is $version but the tag is $tag"
+            exit 1
+          fi
+      - name: the tag must be a signed annotated tag
+        run: |
+          git fetch --tags --force
+          git verify-tag "${{ github.event.release.tag_name }}"
+
+  build:
+    needs: verify
+    runs-on: ubuntu-latest
+    outputs:
+      tarball: ${{ steps.pack.outputs.tarball }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.21.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/build.mjs
+      - id: pack
+        run: |
+          npm pack --pack-destination /tmp/pack
+          echo "tarball=$(ls /tmp/pack/*.tgz)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: /tmp/pack/*.tgz
+
+  attest:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: package
+          path: /tmp/pack
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: /tmp/pack/*.tgz
+
+  publish:
+    needs: attest
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.21.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+      - run: npm install -g npm@latest
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/build.mjs
+      - run: npm publish --access public

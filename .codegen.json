@@ -1,0 +1,29 @@
+{
+  "generator": "epostix-codegen",
+  "spec": {
+    "raw_sha256": "bb71a54ab7ec8025ecc7f833f8a9c260ee0a9040fcfb39608c5cde1ba952c6f2",
+    "contract_sha256": "8f5de3df7a3ac063c6f0110ffc007cea51db26cb9f2826b0d72e6e27d235b4f3"
+  },
+  "ir_sha256": "182bab5a6f40f8c424518090112332f014d04098e0969687b0f3321738d93b07",
+  "files": {
+    "src/generated/models.ts": "5ce63f1a1ff2f4a08f87ae3a87ab4706903f03ce39785673acdbe2fa46930a4c",
+    "src/generated/codecs.ts": "274040f0d85c8930e049c1b0f4ffe1b31b8042f89c91a6e563fd230df7a58ae5",
+    "src/generated/operations.ts": "9eac4f37f043972dcb1bb3737012b378722b19af0632420194183ea88a86e14a",
+    "src/generated/resources/analytics.ts": "aad82df57bde6ef35e72f2422078138a00946f23f1c5eec04d90d5b0ca59bb2a",
+    "src/generated/resources/apiKeys.ts": "3d242ff4c398b68a9f9660fc749dd26c2481bb3f15cb4b69cdd17f25c9504876",
+    "src/generated/resources/attachments.ts": "ac809a1097c3b8d89b9010e3f12305e69a927d70f9d41c963973134854c248d2",
+    "src/generated/resources/broadcasts.ts": "3614a8151b16294060d03a51f0b87d0f99f86f01fe8af0bbcfeeb8e15fcc1c49",
+    "src/generated/resources/contacts.ts": "6b87f3a72f3a3974b756c8c5ea4b876d3dbdd7382778bdde7299bf4f5595beeb",
+    "src/generated/resources/domains.ts": "fd30473e463c16bcfa4017c063a0098d3d7dddbd10a5d1efc33fa5a09edd75dd",
+    "src/generated/resources/emails.ts": "c66cea4f66df2ba7006b8660a1dc8be569d5ca07ae39b88cbcc05480e3ab2f09",
+    "src/generated/resources/events.ts": "ba9ad292f9e7a0bd4cc680e779f95a14e8582053c93ac2a5e7ce1ea9a967fac8",
+    "src/generated/resources/inbound.ts": "3e7029ffe0e741eeb54f92b22cd19d76dd78065e2eb5fe0c19bbffd899e7fbad",
+    "src/generated/resources/suppressions.ts": "c908086ce0b084daefd06b24ee8abbeec3c10d69793cb609a74195f47ac7fd5d",
+    "src/generated/resources/tags.ts": "0c989a1b985a478fbeee7127265cbe720f0bd247b35ebae9c598625a5c64dea2",
+    "src/generated/resources/templates.ts": "ead48b2faa8f8fee2c87fbe0c4161ca8ddfe41a761ab4ce07f4ebc44d98d77f2",
+    "src/generated/resources/templates-versions.ts": "68e2aa61706bcaed8e383f10c99731aa926ed7f56bd15b5a9b14cd6708d462e0",
+    "src/generated/resources/webhooks.ts": "d7e66be9e7046a85a9c06d4c5c35e8aa8227c499f2296af724b8cde4df727cc7",
+    "src/generated/resources/webhooks-logs.ts": "ab8988382db32addac99da3dc9ef40444d79ad07bd189bd78064abafd7a66e62",
+    "src/generated/index.ts": "c35c25cfc13f727518518906f2e8ed3104d7ff68aaf679a6ece23d288559fe1d"
+  }
+}

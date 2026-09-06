@@ -1,0 +1,72 @@
+{
+  "name": "@epostix/sdk",
+  "version": "1.0.0",
+  "description": "Official Epostix SDK for TypeScript and JavaScript",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "openapi",
+    ".codegen.json"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./node": {
+      "types": "./dist/types/attachments/node.d.ts",
+      "import": "./dist/esm/attachments/node.js",
+      "require": "./dist/cjs/attachments/node.js"
+    },
+    "./webhooks": {
+      "types": "./dist/types/webhooks/verify.d.ts",
+      "import": "./dist/esm/webhooks/verify.js",
+      "require": "./dist/cjs/webhooks/verify.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epostix/sdk-js.git"
+  },
+  "homepage": "https://docs.epostix.com",
+  "bugs": {
+    "url": "https://github.com/epostix/sdk-js/issues"
+  },
+  "keywords": [
+    "epostix",
+    "email",
+    "transactional",
+    "smtp",
+    "api"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "test": "node --test test/*.test.ts",
+    "gen:check": "node scripts/gen-check.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "esbuild": "0.25.10",
+    "typescript": "5.9.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
