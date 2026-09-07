@@ -34,9 +34,29 @@ jobs:
             exit 1
           fi
       - name: the tag must be a signed annotated tag
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git fetch --tags --force
-          git verify-tag "${{ github.event.release.tag_name }}"
+          tag="${{ github.event.release.tag_name }}"
+          ref=$(gh api "repos/${{ github.repository }}/git/ref/tags/$tag")
+          kind=$(echo "$ref" | jq -r .object.type)
+          sha=$(echo "$ref" | jq -r .object.sha)
+
+          if [ "$kind" != "tag" ]; then
+            echo "$tag is a lightweight tag; a release must use a signed annotated tag"
+            exit 1
+          fi
+
+          object=$(gh api "repos/${{ github.repository }}/git/tags/$sha")
+          verified=$(echo "$object" | jq -r .verification.verified)
+          reason=$(echo "$object" | jq -r .verification.reason)
+
+          if [ "$verified" != "true" ]; then
+            echo "$tag is not a verified signed tag: $reason"
+            exit 1
+          fi
+
+          echo "$tag is signed and verified by GitHub ($reason)"
 
   build:
     needs: verify
