@@ -154,7 +154,7 @@ export interface APIKeyCreateRequest {
   expiresAt: Date;
   name: string;
   environment?: APIKeyCreateRequestEnvironment;
-  permissions?: PermissionScope[];
+  permissions?: PermissionGrant[];
   whitelistIps?: string[];
 }
 
@@ -179,7 +179,7 @@ export interface APIKeyCreateResponse {
   environment: APIKeyCreateResponseEnvironment;
   id: string;
   name: string;
-  permissions: PermissionScope[];
+  permissions: PermissionGrant[];
   token: string;
   tokenHint: string;
   expiresAt?: Date | null;
@@ -213,7 +213,7 @@ export interface APIKeyResponse {
   environment: APIKeyResponseEnvironment;
   id: string;
   name: string;
-  permissions: PermissionScope[];
+  permissions: PermissionGrant[];
   tokenHint: string;
   expiresAt?: Date | null;
   lastUsedAt?: Date | null;
@@ -240,7 +240,7 @@ export function isAPIKeyResponseEnvironmentKnown(value: string): boolean {
 
 export interface APIKeyUpdateRequest {
   name?: string;
-  permissions?: PermissionScope[];
+  permissions?: PermissionGrant[];
   whitelistIps?: string[];
 }
 
@@ -257,7 +257,7 @@ export interface APIKeyUsageLog {
   path: string;
   statusCode: number;
   ipAddress?: string | null;
-  scopeUsed?: string | null;
+  scopeUsed?: PermissionScope;
 }
 
 export interface Attachment {
@@ -551,13 +551,14 @@ export interface DnsRecord {
   priority?: number;
 }
 
-export type DnsRecordKind = 'spf' | 'dkim' | 'dmarc' | 'mx_inbound' | (string & {});
+export type DnsRecordKind = 'spf' | 'dkim' | 'dmarc' | 'mx_inbound' | 'openpgpkey' | (string & {});
 
 export const DnsRecordKindValues = {
   Spf: 'spf',
   Dkim: 'dkim',
   Dmarc: 'dmarc',
   MxInbound: 'mx_inbound',
+  Openpgpkey: 'openpgpkey',
 } as const;
 
 export const DnsRecordKindKnown: ReadonlySet<string> = new Set([
@@ -565,6 +566,7 @@ export const DnsRecordKindKnown: ReadonlySet<string> = new Set([
   'dkim',
   'dmarc',
   'mx_inbound',
+  'openpgpkey',
 ]);
 
 export function isDnsRecordKindKnown(value: string): boolean {
@@ -894,7 +896,7 @@ export interface EventListResponse {
   nextCursor?: string;
 }
 
-export type EventType = 'email.sent' | 'email.delivered' | 'email.bounced' | 'email.opened' | 'email.clicked' | 'email.complained' | 'email.failed' | 'email.delayed' | 'email.received' | 'webhook.test' | (string & {});
+export type EventType = 'email.sent' | 'email.delivered' | 'email.bounced' | 'email.opened' | 'email.clicked' | 'email.complained' | 'email.failed' | 'email.delayed' | 'email.cancelled' | 'email.received' | 'email.return_path_reply' | 'domain.verified' | 'domain.verification_failed' | 'tracking_domain.verified' | 'tracking_domain.verification_failed' | 'campaign.started' | 'campaign.paused' | 'campaign.resumed' | 'campaign.completed' | 'campaign.cancelled' | 'campaign.auto_paused' | 'contact.status_changed' | 'contact.import_completed' | 'suppression.created' | 'suppression.removed' | 'webhook.test' | (string & {});
 
 export const EventTypeValues = {
   EmailSent: 'email.sent',
@@ -905,7 +907,23 @@ export const EventTypeValues = {
   EmailComplained: 'email.complained',
   EmailFailed: 'email.failed',
   EmailDelayed: 'email.delayed',
+  EmailCancelled: 'email.cancelled',
   EmailReceived: 'email.received',
+  EmailReturnPathReply: 'email.return_path_reply',
+  DomainVerified: 'domain.verified',
+  DomainVerificationFailed: 'domain.verification_failed',
+  TrackingDomainVerified: 'tracking_domain.verified',
+  TrackingDomainVerificationFailed: 'tracking_domain.verification_failed',
+  CampaignStarted: 'campaign.started',
+  CampaignPaused: 'campaign.paused',
+  CampaignResumed: 'campaign.resumed',
+  CampaignCompleted: 'campaign.completed',
+  CampaignCancelled: 'campaign.cancelled',
+  CampaignAutoPaused: 'campaign.auto_paused',
+  ContactStatusChanged: 'contact.status_changed',
+  ContactImportCompleted: 'contact.import_completed',
+  SuppressionCreated: 'suppression.created',
+  SuppressionRemoved: 'suppression.removed',
   WebhookTest: 'webhook.test',
 } as const;
 
@@ -918,7 +936,23 @@ export const EventTypeKnown: ReadonlySet<string> = new Set([
   'email.complained',
   'email.failed',
   'email.delayed',
+  'email.cancelled',
   'email.received',
+  'email.return_path_reply',
+  'domain.verified',
+  'domain.verification_failed',
+  'tracking_domain.verified',
+  'tracking_domain.verification_failed',
+  'campaign.started',
+  'campaign.paused',
+  'campaign.resumed',
+  'campaign.completed',
+  'campaign.cancelled',
+  'campaign.auto_paused',
+  'contact.status_changed',
+  'contact.import_completed',
+  'suppression.created',
+  'suppression.removed',
   'webhook.test',
 ]);
 
@@ -1127,7 +1161,7 @@ export function isListEventsEventTypeKnown(value: string): boolean {
   return ListEventsEventTypeKnown.has(value);
 }
 
-export type ListSuppressionsReason = 'hard_bounce' | 'soft_bounce' | 'complaint' | 'manual' | 'unsubscribe' | (string & {});
+export type ListSuppressionsReason = 'hard_bounce' | 'soft_bounce' | 'complaint' | 'manual' | 'unsubscribe' | 'cleaned' | (string & {});
 
 export const ListSuppressionsReasonValues = {
   HardBounce: 'hard_bounce',
@@ -1135,6 +1169,7 @@ export const ListSuppressionsReasonValues = {
   Complaint: 'complaint',
   Manual: 'manual',
   Unsubscribe: 'unsubscribe',
+  Cleaned: 'cleaned',
 } as const;
 
 export const ListSuppressionsReasonKnown: ReadonlySet<string> = new Set([
@@ -1143,6 +1178,7 @@ export const ListSuppressionsReasonKnown: ReadonlySet<string> = new Set([
   'complaint',
   'manual',
   'unsubscribe',
+  'cleaned',
 ]);
 
 export function isListSuppressionsReasonKnown(value: string): boolean {
@@ -1173,6 +1209,8 @@ export interface MailboxAddressValue {
   email: string;
   name?: string;
 }
+
+export type PermissionGrant = string;
 
 export type PermissionScope = 'sending' | 'emails:read' | 'domains:manage' | 'contacts:manage' | 'webhooks:manage' | 'analytics:read' | 'api-keys:manage' | 'suppressions:read' | 'suppressions:manage' | 'templates:read' | 'templates:manage' | 'inbound:read' | 'inbound:manage' | 'broadcasts:read' | 'broadcasts:manage' | 'broadcasts:send' | '*' | (string & {});
 
@@ -1345,7 +1383,7 @@ export interface SuppressionDetail {
   reason?: SuppressionDetailReason;
 }
 
-export type SuppressionDetailReason = 'hard_bounce' | 'soft_bounce' | 'complaint' | 'manual' | 'unsubscribe' | (string & {});
+export type SuppressionDetailReason = 'hard_bounce' | 'soft_bounce' | 'complaint' | 'manual' | 'unsubscribe' | 'cleaned' | (string & {});
 
 export const SuppressionDetailReasonValues = {
   HardBounce: 'hard_bounce',
@@ -1353,6 +1391,7 @@ export const SuppressionDetailReasonValues = {
   Complaint: 'complaint',
   Manual: 'manual',
   Unsubscribe: 'unsubscribe',
+  Cleaned: 'cleaned',
 } as const;
 
 export const SuppressionDetailReasonKnown: ReadonlySet<string> = new Set([
@@ -1361,6 +1400,7 @@ export const SuppressionDetailReasonKnown: ReadonlySet<string> = new Set([
   'complaint',
   'manual',
   'unsubscribe',
+  'cleaned',
 ]);
 
 export function isSuppressionDetailReasonKnown(value: string): boolean {
@@ -1373,7 +1413,7 @@ export interface SuppressionListResponse {
   nextCursor?: string;
 }
 
-export type SuppressionReason = 'hard_bounce' | 'soft_bounce' | 'complaint' | 'manual' | 'unsubscribe' | (string & {});
+export type SuppressionReason = 'hard_bounce' | 'soft_bounce' | 'complaint' | 'manual' | 'unsubscribe' | 'cleaned' | (string & {});
 
 export const SuppressionReasonValues = {
   HardBounce: 'hard_bounce',
@@ -1381,6 +1421,7 @@ export const SuppressionReasonValues = {
   Complaint: 'complaint',
   Manual: 'manual',
   Unsubscribe: 'unsubscribe',
+  Cleaned: 'cleaned',
 } as const;
 
 export const SuppressionReasonKnown: ReadonlySet<string> = new Set([
@@ -1389,6 +1430,7 @@ export const SuppressionReasonKnown: ReadonlySet<string> = new Set([
   'complaint',
   'manual',
   'unsubscribe',
+  'cleaned',
 ]);
 
 export function isSuppressionReasonKnown(value: string): boolean {
@@ -1525,6 +1567,7 @@ export interface Webhook {
   description?: string;
   disabledAt?: Date | null;
   disabledReason?: string | null;
+  domainIds?: string[];
   failureCount?: number;
   updatedAt?: Date;
 }
@@ -1541,6 +1584,7 @@ export interface WebhookCreateRequest {
   events: WebhookEventType[];
   url: string;
   description?: string;
+  domainIds?: string[];
   secret?: string;
 }
 
@@ -1552,6 +1596,7 @@ export interface WebhookCreateResponse {
   secret: string;
   url: string;
   description?: string;
+  domainIds?: string[];
   updatedAt?: Date;
 }
 
@@ -1594,7 +1639,7 @@ export function isWebhookDeliveryLogStatusKnown(value: string): boolean {
   return WebhookDeliveryLogStatusKnown.has(value);
 }
 
-export type WebhookEventType = 'email.sent' | 'email.delivered' | 'email.bounced' | 'email.opened' | 'email.clicked' | 'email.complained' | 'email.failed' | 'email.delayed' | 'email.received' | (string & {});
+export type WebhookEventType = 'email.sent' | 'email.delivered' | 'email.bounced' | 'email.opened' | 'email.clicked' | 'email.complained' | 'email.failed' | 'email.delayed' | 'email.cancelled' | 'email.received' | 'email.return_path_reply' | 'domain.verified' | 'domain.verification_failed' | 'tracking_domain.verified' | 'tracking_domain.verification_failed' | 'campaign.started' | 'campaign.paused' | 'campaign.resumed' | 'campaign.completed' | 'campaign.cancelled' | 'campaign.auto_paused' | 'contact.status_changed' | 'contact.import_completed' | 'suppression.created' | 'suppression.removed' | (string & {});
 
 export const WebhookEventTypeValues = {
   EmailSent: 'email.sent',
@@ -1605,7 +1650,23 @@ export const WebhookEventTypeValues = {
   EmailComplained: 'email.complained',
   EmailFailed: 'email.failed',
   EmailDelayed: 'email.delayed',
+  EmailCancelled: 'email.cancelled',
   EmailReceived: 'email.received',
+  EmailReturnPathReply: 'email.return_path_reply',
+  DomainVerified: 'domain.verified',
+  DomainVerificationFailed: 'domain.verification_failed',
+  TrackingDomainVerified: 'tracking_domain.verified',
+  TrackingDomainVerificationFailed: 'tracking_domain.verification_failed',
+  CampaignStarted: 'campaign.started',
+  CampaignPaused: 'campaign.paused',
+  CampaignResumed: 'campaign.resumed',
+  CampaignCompleted: 'campaign.completed',
+  CampaignCancelled: 'campaign.cancelled',
+  CampaignAutoPaused: 'campaign.auto_paused',
+  ContactStatusChanged: 'contact.status_changed',
+  ContactImportCompleted: 'contact.import_completed',
+  SuppressionCreated: 'suppression.created',
+  SuppressionRemoved: 'suppression.removed',
 } as const;
 
 export const WebhookEventTypeKnown: ReadonlySet<string> = new Set([
@@ -1617,7 +1678,23 @@ export const WebhookEventTypeKnown: ReadonlySet<string> = new Set([
   'email.complained',
   'email.failed',
   'email.delayed',
+  'email.cancelled',
   'email.received',
+  'email.return_path_reply',
+  'domain.verified',
+  'domain.verification_failed',
+  'tracking_domain.verified',
+  'tracking_domain.verification_failed',
+  'campaign.started',
+  'campaign.paused',
+  'campaign.resumed',
+  'campaign.completed',
+  'campaign.cancelled',
+  'campaign.auto_paused',
+  'contact.status_changed',
+  'contact.import_completed',
+  'suppression.created',
+  'suppression.removed',
 ]);
 
 export function isWebhookEventTypeKnown(value: string): boolean {
@@ -1638,6 +1715,7 @@ export interface WebhookRotateSecretResponse {
 export interface WebhookUpdateRequest {
   active?: boolean;
   description?: string;
+  domainIds?: string[];
   events?: WebhookEventType[];
   url?: string;
 }

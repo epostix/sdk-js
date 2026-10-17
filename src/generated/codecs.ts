@@ -171,7 +171,7 @@ const fieldsAPIKeyUsageLog: FieldSpec[] = [
   { wire: 'path', name: 'path', codec: () => passthrough, required: true, nullable: false },
   { wire: 'status_code', name: 'statusCode', codec: () => passthrough, required: true, nullable: false },
   { wire: 'ip_address', name: 'ipAddress', codec: () => passthrough, required: false, nullable: true },
-  { wire: 'scope_used', name: 'scopeUsed', codec: () => passthrough, required: false, nullable: true },
+  { wire: 'scope_used', name: 'scopeUsed', codec: () => passthrough, required: false, nullable: false },
 ];
 
 export const codecAPIKeyUsageLog: Codec<models.APIKeyUsageLog> = {
@@ -1185,6 +1185,7 @@ const fieldsWebhook: FieldSpec[] = [
   { wire: 'description', name: 'description', codec: () => passthrough, required: false, nullable: false },
   { wire: 'disabled_at', name: 'disabledAt', codec: () => dateTime, required: false, nullable: true },
   { wire: 'disabled_reason', name: 'disabledReason', codec: () => passthrough, required: false, nullable: true },
+  { wire: 'domain_ids', name: 'domainIds', codec: () => arrayOf(passthrough), required: false, nullable: false },
   { wire: 'failure_count', name: 'failureCount', codec: () => passthrough, required: false, nullable: false },
   { wire: 'updated_at', name: 'updatedAt', codec: () => dateTime, required: false, nullable: false },
 ];
@@ -1216,6 +1217,7 @@ const fieldsWebhookCreateRequest: FieldSpec[] = [
   { wire: 'events', name: 'events', codec: () => arrayOf(passthrough), required: true, nullable: false },
   { wire: 'url', name: 'url', codec: () => passthrough, required: true, nullable: false },
   { wire: 'description', name: 'description', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'domain_ids', name: 'domainIds', codec: () => arrayOf(passthrough), required: false, nullable: false },
   { wire: 'secret', name: 'secret', codec: () => passthrough, required: false, nullable: false },
 ];
 
@@ -1232,6 +1234,7 @@ const fieldsWebhookCreateResponse: FieldSpec[] = [
   { wire: 'secret', name: 'secret', codec: () => passthrough, required: true, nullable: false },
   { wire: 'url', name: 'url', codec: () => passthrough, required: true, nullable: false },
   { wire: 'description', name: 'description', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'domain_ids', name: 'domainIds', codec: () => arrayOf(passthrough), required: false, nullable: false },
   { wire: 'updated_at', name: 'updatedAt', codec: () => dateTime, required: false, nullable: false },
 ];
 
@@ -1295,6 +1298,7 @@ export const codecWebhookRotateSecretResponse: Codec<models.WebhookRotateSecretR
 const fieldsWebhookUpdateRequest: FieldSpec[] = [
   { wire: 'active', name: 'active', codec: () => passthrough, required: false, nullable: false },
   { wire: 'description', name: 'description', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'domain_ids', name: 'domainIds', codec: () => arrayOf(passthrough), required: false, nullable: false },
   { wire: 'events', name: 'events', codec: () => arrayOf(passthrough), required: false, nullable: false },
   { wire: 'url', name: 'url', codec: () => passthrough, required: false, nullable: false },
 ];
