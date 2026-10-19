@@ -61,7 +61,7 @@ export function buildTransport(options: EpostixOptions): EpostixTransport {
     retryPolicy: options.retryPolicy ?? defaultRetryPolicy,
     fetch: options.fetch ?? globalThis.fetch,
     defaultHeaders: options.defaultHeaders ?? {},
-    userAgent: `epostix-js/1.1.0${suffix}`,
+    userAgent: `epostix-js/1.2.0${suffix}`,
     automaticIdempotencyKeys: options.automaticIdempotencyKeys ?? true,
     randomValues: options.randomValues ?? ((size) => crypto.getRandomValues(new Uint8Array(size))),
     now: options.now ?? (() => performance.now()),
