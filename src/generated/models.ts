@@ -308,11 +308,104 @@ export interface AttachmentURL {
   contentType?: string;
 }
 
+export type BounceFault = 'recipient' | 'sender' | 'unknown' | (string & {});
+
+export const BounceFaultValues = {
+  Recipient: 'recipient',
+  Sender: 'sender',
+  Unknown: 'unknown',
+} as const;
+
+export const BounceFaultKnown: ReadonlySet<string> = new Set([
+  'recipient',
+  'sender',
+  'unknown',
+]);
+
+export function isBounceFaultKnown(value: string): boolean {
+  return BounceFaultKnown.has(value);
+}
+
 export interface BounceHistoryEntry {
-  bounceSubtype?: string;
-  bounceType?: string;
-  createdAt?: Date;
+  createdAt: Date;
+  kind: BounceHistoryEntryKind;
+  enhancedStatusCode?: string;
+  fault?: BounceFault;
+  feedbackType?: string;
+  permanent?: boolean;
+  provider?: string;
+  reason?: BounceReason;
+  response?: string;
   smtpCode?: number;
+  source?: BounceSource;
+}
+
+export type BounceHistoryEntryKind = 'bounce' | 'complaint' | (string & {});
+
+export const BounceHistoryEntryKindValues = {
+  Bounce: 'bounce',
+  Complaint: 'complaint',
+} as const;
+
+export const BounceHistoryEntryKindKnown: ReadonlySet<string> = new Set([
+  'bounce',
+  'complaint',
+]);
+
+export function isBounceHistoryEntryKindKnown(value: string): boolean {
+  return BounceHistoryEntryKindKnown.has(value);
+}
+
+export type BounceReason = 'mailbox_unknown' | 'mailbox_full' | 'mailbox_disabled' | 'domain_unroutable' | 'blocklist' | 'reputation' | 'rate_limited' | 'policy' | 'content' | 'authentication' | 'sender_address' | 'unclassified' | (string & {});
+
+export const BounceReasonValues = {
+  MailboxUnknown: 'mailbox_unknown',
+  MailboxFull: 'mailbox_full',
+  MailboxDisabled: 'mailbox_disabled',
+  DomainUnroutable: 'domain_unroutable',
+  Blocklist: 'blocklist',
+  Reputation: 'reputation',
+  RateLimited: 'rate_limited',
+  Policy: 'policy',
+  Content: 'content',
+  Authentication: 'authentication',
+  SenderAddress: 'sender_address',
+  Unclassified: 'unclassified',
+} as const;
+
+export const BounceReasonKnown: ReadonlySet<string> = new Set([
+  'mailbox_unknown',
+  'mailbox_full',
+  'mailbox_disabled',
+  'domain_unroutable',
+  'blocklist',
+  'reputation',
+  'rate_limited',
+  'policy',
+  'content',
+  'authentication',
+  'sender_address',
+  'unclassified',
+]);
+
+export function isBounceReasonKnown(value: string): boolean {
+  return BounceReasonKnown.has(value);
+}
+
+export type BounceSource = 'smtp' | 'ndr' | (string & {});
+
+export const BounceSourceValues = {
+  Smtp: 'smtp',
+  Ndr: 'ndr',
+} as const;
+
+export const BounceSourceKnown: ReadonlySet<string> = new Set([
+  'smtp',
+  'ndr',
+]);
+
+export function isBounceSourceKnown(value: string): boolean {
+  return BounceSourceKnown.has(value);
 }
 
 export interface Broadcast {

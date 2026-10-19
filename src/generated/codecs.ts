@@ -237,10 +237,17 @@ export const codecAttachmentURL: Codec<models.AttachmentURL> = {
 };
 
 const fieldsBounceHistoryEntry: FieldSpec[] = [
-  { wire: 'bounce_subtype', name: 'bounceSubtype', codec: () => passthrough, required: false, nullable: false },
-  { wire: 'bounce_type', name: 'bounceType', codec: () => passthrough, required: false, nullable: false },
-  { wire: 'created_at', name: 'createdAt', codec: () => dateTime, required: false, nullable: false },
+  { wire: 'created_at', name: 'createdAt', codec: () => dateTime, required: true, nullable: false },
+  { wire: 'kind', name: 'kind', codec: () => passthrough, required: true, nullable: false },
+  { wire: 'enhanced_status_code', name: 'enhancedStatusCode', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'fault', name: 'fault', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'feedback_type', name: 'feedbackType', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'permanent', name: 'permanent', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'provider', name: 'provider', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'reason', name: 'reason', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'response', name: 'response', codec: () => passthrough, required: false, nullable: false },
   { wire: 'smtp_code', name: 'smtpCode', codec: () => passthrough, required: false, nullable: false },
+  { wire: 'source', name: 'source', codec: () => passthrough, required: false, nullable: false },
 ];
 
 export const codecBounceHistoryEntry: Codec<models.BounceHistoryEntry> = {
