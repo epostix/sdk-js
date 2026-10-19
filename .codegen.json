@@ -1,13 +1,13 @@
 {
   "generator": "epostix-codegen",
   "spec": {
-    "raw_sha256": "87581befc8459e02517da9c8d61cb2d95bc144cfd0984fc0cd8876eff451e306",
-    "contract_sha256": "a0fe15cc334d2cdfbb0d0073ca9d77a6598ff241d76ce466334484fe3d9a364b"
+    "raw_sha256": "d346966c5567d37d13224318d2128bd44e0b2db7d71c683c320a25e9f4eaf767",
+    "contract_sha256": "7ec82058bbdc739b30ee0c1cf534c27cb02c2c286def10b2f9ff1d93a735a512"
   },
-  "ir_sha256": "ab847957ef9f10e83d1122d30dc6cf89798c3c5fb5f725fe4461e810b9d98a06",
+  "ir_sha256": "9fe686064b38762e15520df5526bd774659e57114f8fe6dc816fa725da7f59c7",
   "files": {
-    "src/generated/models.ts": "0176eb386a443b682998f4fa0fc08a63159276f6a05c241a74b308c968134ffd",
-    "src/generated/codecs.ts": "d7e169150e1a18d39a97fe95216f4e48b18f9b47c1b491b9ac0172199db1ce6c",
+    "src/generated/models.ts": "3cb94c57b6699497e53367b3e3d98655032b0e86268722bf2620bc13a2e7e773",
+    "src/generated/codecs.ts": "34c3ae3c9e28aa9a68af1168379106a10b55c77d7b80e44a680578a73cedd49b",
     "src/generated/operations.ts": "9eac4f37f043972dcb1bb3737012b378722b19af0632420194183ea88a86e14a",
     "src/generated/resources/analytics.ts": "aad82df57bde6ef35e72f2422078138a00946f23f1c5eec04d90d5b0ca59bb2a",
     "src/generated/resources/apiKeys.ts": "3d242ff4c398b68a9f9660fc749dd26c2481bb3f15cb4b69cdd17f25c9504876",
