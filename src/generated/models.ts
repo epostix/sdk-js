@@ -799,6 +799,7 @@ export interface Email {
   deliveryTimeMs?: number;
   errorMessage?: string;
   events?: EmailEvent[];
+  failure?: EmailFailure;
   from?: string;
   headers?: Record<string, string>;
   html?: string;
@@ -922,6 +923,69 @@ export interface EmailEvent {
   createdAt: Date;
   status: string;
   eventType?: string;
+}
+
+export interface EmailFailedEventData {
+  domainId: string;
+  emailId: string;
+  failure?: EmailFailure;
+}
+
+export interface EmailFailure {
+  fault: EmailFailureFault;
+  reason: EmailFailureReason;
+}
+
+export type EmailFailureFault = 'recipient' | 'sender' | 'platform' | 'unknown' | (string & {});
+
+export const EmailFailureFaultValues = {
+  Recipient: 'recipient',
+  Sender: 'sender',
+  Platform: 'platform',
+  Unknown: 'unknown',
+} as const;
+
+export const EmailFailureFaultKnown: ReadonlySet<string> = new Set([
+  'recipient',
+  'sender',
+  'platform',
+  'unknown',
+]);
+
+export function isEmailFailureFaultKnown(value: string): boolean {
+  return EmailFailureFaultKnown.has(value);
+}
+
+export type EmailFailureReason = 'suppressed' | 'invalid_recipient' | 'bounced' | 'expired' | 'attachment_too_large' | 'attachment_unavailable' | 'dkim_key_mismatch' | 'sending_restricted' | 'platform_error' | 'not_delivered' | (string & {});
+
+export const EmailFailureReasonValues = {
+  Suppressed: 'suppressed',
+  InvalidRecipient: 'invalid_recipient',
+  Bounced: 'bounced',
+  Expired: 'expired',
+  AttachmentTooLarge: 'attachment_too_large',
+  AttachmentUnavailable: 'attachment_unavailable',
+  DkimKeyMismatch: 'dkim_key_mismatch',
+  SendingRestricted: 'sending_restricted',
+  PlatformError: 'platform_error',
+  NotDelivered: 'not_delivered',
+} as const;
+
+export const EmailFailureReasonKnown: ReadonlySet<string> = new Set([
+  'suppressed',
+  'invalid_recipient',
+  'bounced',
+  'expired',
+  'attachment_too_large',
+  'attachment_unavailable',
+  'dkim_key_mismatch',
+  'sending_restricted',
+  'platform_error',
+  'not_delivered',
+]);
+
+export function isEmailFailureReasonKnown(value: string): boolean {
+  return EmailFailureReasonKnown.has(value);
 }
 
 export interface EmailListResponse {

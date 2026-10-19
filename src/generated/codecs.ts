@@ -604,6 +604,7 @@ const fieldsEmail: FieldSpec[] = [
   { wire: 'delivery_time_ms', name: 'deliveryTimeMs', codec: () => passthrough, required: false, nullable: false },
   { wire: 'error_message', name: 'errorMessage', codec: () => passthrough, required: false, nullable: false },
   { wire: 'events', name: 'events', codec: () => arrayOf(codecEmailEvent), required: false, nullable: false },
+  { wire: 'failure', name: 'failure', codec: () => codecEmailFailure, required: false, nullable: false },
   { wire: 'from', name: 'from', codec: () => passthrough, required: false, nullable: false },
   { wire: 'headers', name: 'headers', codec: () => mapOf(passthrough), required: false, nullable: false },
   { wire: 'html', name: 'html', codec: () => passthrough, required: false, nullable: false },
@@ -739,6 +740,27 @@ const fieldsEmailEvent: FieldSpec[] = [
 export const codecEmailEvent: Codec<models.EmailEvent> = {
   encode: (value) => encodeObject(value as unknown as Record<string, unknown>, fieldsEmailEvent),
   decode: (value) => decodeObject(value, fieldsEmailEvent) as unknown as models.EmailEvent,
+};
+
+const fieldsEmailFailedEventData: FieldSpec[] = [
+  { wire: 'domain_id', name: 'domainId', codec: () => passthrough, required: true, nullable: false },
+  { wire: 'email_id', name: 'emailId', codec: () => passthrough, required: true, nullable: false },
+  { wire: 'failure', name: 'failure', codec: () => codecEmailFailure, required: false, nullable: false },
+];
+
+export const codecEmailFailedEventData: Codec<models.EmailFailedEventData> = {
+  encode: (value) => encodeObject(value as unknown as Record<string, unknown>, fieldsEmailFailedEventData),
+  decode: (value) => decodeObject(value, fieldsEmailFailedEventData) as unknown as models.EmailFailedEventData,
+};
+
+const fieldsEmailFailure: FieldSpec[] = [
+  { wire: 'fault', name: 'fault', codec: () => passthrough, required: true, nullable: false },
+  { wire: 'reason', name: 'reason', codec: () => passthrough, required: true, nullable: false },
+];
+
+export const codecEmailFailure: Codec<models.EmailFailure> = {
+  encode: (value) => encodeObject(value as unknown as Record<string, unknown>, fieldsEmailFailure),
+  decode: (value) => decodeObject(value, fieldsEmailFailure) as unknown as models.EmailFailure,
 };
 
 const fieldsEmailListResponse: FieldSpec[] = [
