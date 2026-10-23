@@ -333,7 +333,7 @@ export interface BounceHistoryEntry {
   fault?: BounceFault;
   feedbackType?: string;
   permanent?: boolean;
-  provider?: string;
+  provider?: MailboxProvider;
   reason?: BounceReason;
   response?: string;
   smtpCode?: number;
@@ -356,7 +356,7 @@ export function isBounceHistoryEntryKindKnown(value: string): boolean {
   return BounceHistoryEntryKindKnown.has(value);
 }
 
-export type BounceReason = 'mailbox_unknown' | 'mailbox_full' | 'mailbox_disabled' | 'domain_unroutable' | 'blocklist' | 'reputation' | 'rate_limited' | 'policy' | 'content' | 'authentication' | 'sender_address' | 'unclassified' | (string & {});
+export type BounceReason = 'mailbox_unknown' | 'mailbox_full' | 'mailbox_disabled' | 'domain_unroutable' | 'blocklist' | 'reputation' | 'rate_limited' | 'policy' | 'content' | 'authentication' | 'sender_address' | 'domain_unreachable' | 'unclassified' | (string & {});
 
 export const BounceReasonValues = {
   MailboxUnknown: 'mailbox_unknown',
@@ -370,6 +370,7 @@ export const BounceReasonValues = {
   Content: 'content',
   Authentication: 'authentication',
   SenderAddress: 'sender_address',
+  DomainUnreachable: 'domain_unreachable',
   Unclassified: 'unclassified',
 } as const;
 
@@ -385,6 +386,7 @@ export const BounceReasonKnown: ReadonlySet<string> = new Set([
   'content',
   'authentication',
   'sender_address',
+  'domain_unreachable',
   'unclassified',
 ]);
 
@@ -392,16 +394,18 @@ export function isBounceReasonKnown(value: string): boolean {
   return BounceReasonKnown.has(value);
 }
 
-export type BounceSource = 'smtp' | 'ndr' | (string & {});
+export type BounceSource = 'smtp' | 'ndr' | 'suppression_list' | (string & {});
 
 export const BounceSourceValues = {
   Smtp: 'smtp',
   Ndr: 'ndr',
+  SuppressionList: 'suppression_list',
 } as const;
 
 export const BounceSourceKnown: ReadonlySet<string> = new Set([
   'smtp',
   'ndr',
+  'suppression_list',
 ]);
 
 export function isBounceSourceKnown(value: string): boolean {
@@ -1365,6 +1369,60 @@ export type MailboxAddress = string | MailboxAddressValue;
 export interface MailboxAddressValue {
   email: string;
   name?: string;
+}
+
+export type MailboxProvider = 'gmail' | 'microsoft' | 'yahoo' | 'apple' | 'proton' | 'zoho' | 'gmx' | 'wp' | 'onet' | 'interia' | 'mailru' | 'yandex' | 'orange' | 'free' | 'sfr' | 'laposte' | 'tonline' | 'seznam' | 'italiaonline' | 'comcast' | 'other' | (string & {});
+
+export const MailboxProviderValues = {
+  Gmail: 'gmail',
+  Microsoft: 'microsoft',
+  Yahoo: 'yahoo',
+  Apple: 'apple',
+  Proton: 'proton',
+  Zoho: 'zoho',
+  Gmx: 'gmx',
+  Wp: 'wp',
+  Onet: 'onet',
+  Interia: 'interia',
+  Mailru: 'mailru',
+  Yandex: 'yandex',
+  Orange: 'orange',
+  Free: 'free',
+  Sfr: 'sfr',
+  Laposte: 'laposte',
+  Tonline: 'tonline',
+  Seznam: 'seznam',
+  Italiaonline: 'italiaonline',
+  Comcast: 'comcast',
+  Other: 'other',
+} as const;
+
+export const MailboxProviderKnown: ReadonlySet<string> = new Set([
+  'gmail',
+  'microsoft',
+  'yahoo',
+  'apple',
+  'proton',
+  'zoho',
+  'gmx',
+  'wp',
+  'onet',
+  'interia',
+  'mailru',
+  'yandex',
+  'orange',
+  'free',
+  'sfr',
+  'laposte',
+  'tonline',
+  'seznam',
+  'italiaonline',
+  'comcast',
+  'other',
+]);
+
+export function isMailboxProviderKnown(value: string): boolean {
+  return MailboxProviderKnown.has(value);
 }
 
 export type PermissionGrant = string;

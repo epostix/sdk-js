@@ -1,12 +1,12 @@
 {
   "generator": "epostix-codegen",
   "spec": {
-    "raw_sha256": "54379af3745df1d6ff6e25c0a00105eefcc7887a70aaf39db0998e3ffce4a8a7",
-    "contract_sha256": "8bf52ce46c813c19a334353438be0aa57e581a6b4a81fa6c03ccb6c8c36d47e0"
+    "raw_sha256": "60c234894bbaab97fa907c882351f35e25d3010c4ce20943692c7a91dafb862e",
+    "contract_sha256": "9511016947844dfeb974093122c68d0a6aa1d0064595c84c1e16861d809ba2f4"
   },
-  "ir_sha256": "b6ce8bbe98f47fad49e3c929de5d8094da77a2144ec228074cbb5dc87fcb1193",
+  "ir_sha256": "7745a32bed2bec87c29becb885eb3de52912b816f704ae9b0a431e6c61e8647b",
   "files": {
-    "src/generated/models.ts": "080d7709e52c3d89d2e9a0576882592de5629b085b30dfe932047dddd5128109",
+    "src/generated/models.ts": "0195d13e59347d01237911e9b601a90777a7c9802efdf4c08073afd8420e1630",
     "src/generated/codecs.ts": "5448f0d267510806656c61e6673f88b9fa7b9fe9aa100dc77a6efab843260b44",
     "src/generated/operations.ts": "9eac4f37f043972dcb1bb3737012b378722b19af0632420194183ea88a86e14a",
     "src/generated/resources/analytics.ts": "aad82df57bde6ef35e72f2422078138a00946f23f1c5eec04d90d5b0ca59bb2a",
